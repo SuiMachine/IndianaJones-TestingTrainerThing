@@ -19,9 +19,6 @@ namespace Flying47
         FailedToWriteInstructionToMemory
     }
 
-
-
-
     class codeInjection
     {
         #region DLLImports
@@ -58,7 +55,14 @@ namespace Flying47
         byte[] originalCode;
         byte[] modifiedCode;
 
-
+        /// <summary>
+        /// This class was written by SuicideMachine to simply code injection with C#. It still needs a code to be actually provided in opBytes.
+        /// </summary>
+        /// <param name="process">Process you want to hook into.</param>
+        /// <param name="addressToHook">Adress of an instraction you are hooking.</param>
+        /// <param name="instrLenghtAtHook">How long the instruction is (byte lenght). The class will automatically nop anything past 5th byte (jmp + 4 adress bytes).</param>
+        /// <param name="injectedCodeAsBytes">Injected code in byte form.</param>
+        /// <param name="autohook">Set this to false, if you don't want to inject the code, but don't want to replace opCodes at the injection point.</param>
         public codeInjection(Process process, uint addressToHook, byte instrLenghtAtHook, byte[] injectedCodeAsBytes, bool autohook = true)
         {
             this.process = process;
@@ -66,9 +70,16 @@ namespace Flying47
             this.returnToAdress = (IntPtr)(addressToHook + instrLenghtAtHook);
 
             result = Inject(injectedCodeAsBytes, instrLenghtAtHook);
-            EnableHook();
+            if(autohook)
+                EnableHook();
         }
 
+        /// <summary>
+        /// This function can be used to update injected code (in case for example, if a module you hooked gets de-allocated and you don't want to inject code again.
+        /// </summary>
+        /// <param name="adressToHook">Adress of an instraction you are hooking.</param>
+        /// <param name="instrLenghtAtHook">Injected code in byte form.</param>
+        /// <returns>True or False depending if the update was successful.</returns>
         public bool updateJmpInstructions(uint adressToHook, byte instrLenghtAtHook)
         {
             modifiedCode = prepareHOOKJMP((IntPtr)addressToHook, instrLenghtAtHook, alocAdress);
@@ -95,6 +106,10 @@ namespace Flying47
             return true;
         }
 
+        /// <summary>
+        /// Enables the Hook (places jmp to the injected code).
+        /// </summary>
+        /// <returns>True or False depending if the update was successful.</returns>
         public bool EnableHook()
         {
             uint pID = (uint)process.Id;
@@ -113,6 +128,10 @@ namespace Flying47
             return true;
         }
 
+        /// <summary>
+        /// Disables the Hook (writes original code).
+        /// </summary>
+        /// <returns>True or False depending if the update was successful.</returns>
         public bool DisableHook()
         {
             uint pID = (uint)process.Id;
@@ -213,6 +232,11 @@ namespace Flying47
         }
 
         #region StaticStuffToHelp
+        /// <summary>
+        /// Converts bytes as string to byte array.
+        /// </summary>
+        /// <param name="bytesAsString">Bytes as string you want to convert to an array, they should be provided without "0x". Whitespaces are allowed. Throws an exception, on error.</param>
+        /// <returns>Array of bytes.</returns>
         public static byte[] stringBytesToArray(string bytesAsString)
         {
             bytesAsString = bytesAsString.Replace(" ", "");

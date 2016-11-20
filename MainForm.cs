@@ -123,6 +123,7 @@ namespace Flying47
                 {
                     foundProcess = false;
                     inj = null;
+                    freezeHealthEnabled = false;
                 }
 
                 
@@ -177,7 +178,6 @@ namespace Flying47
             gBuffer.DrawLine(new Pen(Color.Blue, 2), half, half, half + half*readSinAlpha, half + half * readCosAlpha);
         }
 
-        // Called when the game is not running or no mission is active.
         // Used to reset all the values.
         private void ResetValues()
         {
@@ -185,6 +185,7 @@ namespace Flying47
             L_Y.Text = "NaN";
             L_Z.Text = "NaN";
             gCoreRequiresRefresh = true;
+            
         }
 
         public void InitHotkey()
