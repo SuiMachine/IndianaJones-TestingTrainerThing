@@ -45,18 +45,21 @@ namespace Flying47
         #endregion
 
         static readonly IntPtr INTPTR_ZERO = (IntPtr)0;
-        public codeInjectionResult result;
-        public Process process;
-        public IntPtr alocAdress;
+        /// <summary>
+        /// Result of code injection
+        /// </summary>
+        public codeInjectionResult result { get; }
+        private Process process;
+        private IntPtr alocAdress;
         private uint injectedCodeLenght;
-        public IntPtr returnToAdress;           //addressToHook + lenght
-        public IntPtr locationOfReturnJmp;      //alocAdress + alocLenght
-        public IntPtr addressToHook;
+        private IntPtr returnToAdress;           //addressToHook + lenght
+        private IntPtr locationOfReturnJmp;      //alocAdress + alocLenght
+        private IntPtr addressToHook;
         byte[] originalCode;
         byte[] modifiedCode;
 
         /// <summary>
-        /// This class was written by SuicideMachine to simply code injection with C#. It still needs a code to be actually provided in opBytes.
+        /// This class was written by SuicideMachine to simply code injection with C#. It still needs a code to be actually provided in opBytes. Use "result" property, for injection result.
         /// </summary>
         /// <param name="process">Process you want to hook into.</param>
         /// <param name="addressToHook">Adress of an instraction you are hooking.</param>
@@ -148,6 +151,15 @@ namespace Flying47
 
             CloseHandle(procHandle);
             return true;
+        }
+
+        /// <summary>
+        /// Used to get address of an allocated memory inside of the process.
+        /// </summary>
+        /// <returns>Address of allocated memory as Unsigned Int (uint).</returns>
+        public uint getAllocationAddress()
+        {
+            return (uint)alocAdress;
         }
 
         private codeInjectionResult Inject(byte[] injectedCodeAsBytes, byte instrLenghtAtHook)

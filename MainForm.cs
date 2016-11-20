@@ -283,7 +283,7 @@ namespace Flying47
                     byte[] injCode = codeInjection.stringBytesToArray("66 81 3E 70 07 0F 85 12 00 00 00 C7 86 84 00 00 00 00 00 16 44 DD D8 D9 86 84 00 00 00 D9 9E 84 00 00 00");
                     inj = new codeInjection(myProcess[0], (uint)gCoreModule + 0x14aef4, 6, injCode);
                     System.Threading.Thread.Sleep(100);
-                    Debug.WriteLine("Injected status: " + inj.result + " adress: 0x" + inj.alocAdress.ToString("X4"));
+                    Debug.WriteLine("Injected status: " + inj.result + " adress: 0x" + inj.getAllocationAddress().ToString("X4"));
                 }
                 else
                 {
