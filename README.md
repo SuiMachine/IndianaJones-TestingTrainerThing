@@ -1,3 +1,3 @@
-Simple tool for flying in Hitman Absolution	
+Indiana Jones Trainer Thing
 ============
-Use only for map exploration!
+To make learning runs easier.
